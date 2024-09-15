@@ -1,0 +1,89 @@
+root@88b87ed57583:/data# 
+root@88b87ed57583:/data# 
+root@88b87ed57583:/data# 
+root@88b87ed57583:/data# 
+root@88b87ed57583:/data# 
+root@88b87ed57583:/data# yarn test:zksync -vvvv
+yarn run v1.22.22
+$ FOUNDRY_PROFILE=zksync forge test -vvv --zksync -vvvv
+[⠊] Compiling...
+No files changed, compilation skipped
+[⠃] Using zksolc-1.5.3
+[⠊] Compiling (zksync)
+No files changed, compilation skipped
+
+Ran 1 test for test/CreateAddress.t.sol:CreateAddressTest
+[PASS] test_Create() (gas: 39134)
+Logs:
+  create address in zkevm 0xF9E9ba9Ed9B96AB918c74B21dD0f1D5f2ac38a30
+  create address in evm 0x5615dEB798BB3E4dFa0139dFa1b3D433Cc23b72f
+
+Traces:
+  [8989] CreateAddressTest::setUp()
+    ├─ [0] VM::envString("FOUNDRY_PROFILE") [staticcall]
+    │   └─ ← [Return] <env var value>
+    └─ ← [Stop] 
+
+  [39134] CreateAddressTest::test_Create()
+    ├─ [0] console::log("create address in zkevm", 0xF9E9ba9Ed9B96AB918c74B21dD0f1D5f2ac38a30) [staticcall]
+    │   └─ ← [Stop] 
+    ├─ [0] console::log("create address in evm", 0x5615dEB798BB3E4dFa0139dFa1b3D433Cc23b72f) [staticcall]
+    │   └─ ← [Stop] 
+    ├─ [0] → new <unknown>@0xF9E9ba9Ed9B96AB918c74B21dD0f1D5f2ac38a30
+    │   └─ ← [Return] 32 bytes of code
+    └─ ← [Stop] 
+
+Suite result: ok. 1 passed; 0 failed; 0 skipped; finished in 18.99ms (16.96ms CPU time)
+
+Ran 1 test suite in 734.64ms (18.99ms CPU time): 1 tests passed, 0 failed, 0 skipped (1 total tests)
+Done in 2.46s.
+root@88b87ed57583:/data# 
+root@88b87ed57583:/data# 
+root@88b87ed57583:/data# 
+root@88b87ed57583:/data# yarn coverage:zksync -vvvv
+yarn run v1.22.22
+$ mkdir -p coverage && FOUNDRY_PROFILE=zksync forge coverage --zksync --report lcov --ir-minimum --report-file coverage/lcov.info -vvvv
+Warning! "--ir-minimum" flag enables viaIR with minimum optimization, which can result in inaccurate source mappings.
+Only use this flag as a workaround if you are experiencing "stack too deep" errors.
+Note that "viaIR" is only available in Solidity 0.8.13 and above.
+See more: https://github.com/foundry-rs/foundry/issues/3357
+[⠊] Compiling...
+[⠔] Compiling 27 files with Solc 0.8.23
+[⠒] Solc 0.8.23 finished in 3.42s
+Compiler run successful!
+Analysing contracts...
+Running tests...
+
+Ran 1 test for test/CreateAddress.t.sol:CreateAddressTest
+[FAIL. Reason: panic: assertion failed (0x01)] test_Create() (gas: 60020)
+Logs:
+  create address in zkevm 0xF9E9ba9Ed9B96AB918c74B21dD0f1D5f2ac38a30
+  create address in evm 0x5615dEB798BB3E4dFa0139dFa1b3D433Cc23b72f
+
+Traces:
+  [11409] CreateAddressTest::setUp()
+    ├─ [0] VM::envString("FOUNDRY_PROFILE") [staticcall]
+    │   └─ ← [Return] <env var value>
+    └─ ← [Return] 
+
+  [60020] CreateAddressTest::test_Create()
+    ├─ [0] console::log("create address in zkevm", 0xF9E9ba9Ed9B96AB918c74B21dD0f1D5f2ac38a30) [staticcall]
+    │   └─ ← [Stop] 
+    ├─ [0] console::log("create address in evm", Empty: [0x5615dEB798BB3E4dFa0139dFa1b3D433Cc23b72f]) [staticcall]
+    │   └─ ← [Stop] 
+    ├─ [13306] → new Empty@0x5615dEB798BB3E4dFa0139dFa1b3D433Cc23b72f
+    │   └─ ← [Return] 66 bytes of code
+    └─ ← [Revert] panic: assertion failed (0x01)
+
+Suite result: FAILED. 0 passed; 1 failed; 0 skipped; finished in 2.85ms (947.25µs CPU time)
+
+Ran 1 test suite in 582.84ms (2.85ms CPU time): 0 tests passed, 1 failed, 0 skipped (1 total tests)
+
+Failing tests:
+Encountered 1 failing test in test/CreateAddress.t.sol:CreateAddressTest
+[FAIL. Reason: panic: assertion failed (0x01)] test_Create() (gas: 60020)
+
+Encountered a total of 1 failing tests, 0 tests succeeded
+error Command failed with exit code 1.
+info Visit https://yarnpkg.com/en/docs/cli/run for documentation about this command.
+root@88b87ed57583:/data# 

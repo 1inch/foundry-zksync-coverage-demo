@@ -1,66 +1,26 @@
-## Foundry
+# foundry-zksync-coverage-demo
 
-**Foundry is a blazing fast, portable and modular toolkit for Ethereum application development written in Rust.**
+This repository demonstrates an issue with test coverage generation (`forge coverage --zksync`) in the zkSync environment, where the regular `EVM` is used instead of the expected `zkEVM`.
+The project contains a simple contract with one test that verifies the address of a deployed contract using `CREATE`, and it shows that `forge coverage --zksync` for zkSync runs using `EVM` instead of `zkEVM`.
 
-Foundry consists of:
+## How to Reproduce
 
--   **Forge**: Ethereum testing framework (like Truffle, Hardhat and DappTools).
--   **Cast**: Swiss army knife for interacting with EVM smart contracts, sending transactions and getting chain data.
--   **Anvil**: Local Ethereum node, akin to Ganache, Hardhat Network.
--   **Chisel**: Fast, utilitarian, and verbose solidity REPL.
+To reproduce the issue, run the following commands:
 
-## Documentation
+1. **Run zkSync tests:**
+   ```
+   yarn test:zksync -vvvv
+   ```
+2. **Run zkSync test coverage:**
+   ```
+   yarn coverage:zksync -vvvv
+   ```
+   The [logs](./logs.txt) will show that the regular `EVM` is being used instead of `zkEVM`, and `new Empty()` created with `EVM`.
+   
+## Screenshots
 
-https://book.getfoundry.sh/
+In the [logs](./logs.txt) above and in the screenshots of these logs, you can see that the regular `EVM` is used in coverage mode instead of `zkEVM`, demonstrating the issue.
 
-## Usage
+![zkSync Tests](./screenshot-test.png)
 
-### Build
-
-```shell
-$ forge build
-```
-
-### Test
-
-```shell
-$ forge test
-```
-
-### Format
-
-```shell
-$ forge fmt
-```
-
-### Gas Snapshots
-
-```shell
-$ forge snapshot
-```
-
-### Anvil
-
-```shell
-$ anvil
-```
-
-### Deploy
-
-```shell
-$ forge script script/Counter.s.sol:CounterScript --rpc-url <your_rpc_url> --private-key <your_private_key>
-```
-
-### Cast
-
-```shell
-$ cast <subcommand>
-```
-
-### Help
-
-```shell
-$ forge --help
-$ anvil --help
-$ cast --help
-```
+![zkSync Coverage](./screenshot-coverage.png)
