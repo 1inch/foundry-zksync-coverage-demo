@@ -2,44 +2,62 @@ name: CI
 
 on:
   push:
+    branches: [ master ]
   pull_request:
-  workflow_dispatch:
-
-env:
-  FOUNDRY_PROFILE: ci
-
 jobs:
-  check:
-    strategy:
-      fail-fast: true
-
-    name: Foundry project
+  test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
         with:
           submodules: recursive
-
       - name: Install Foundry
         uses: foundry-rs/foundry-toolchain@v1
+      - name: Run tests
+        run: FOUNDRY_PROFILE=default forge test -vvv --gas-report
+
+  test-zksync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
         with:
-          version: nightly
+          submodules: recursive
+      - uses: actions/checkout@v4
+        with:
+          repository: matter-labs/foundry-zksync
+          ref: 'main'
+          path: 'foundry-zksync'
 
-      - name: Show Forge version
-        run: |
-          forge --version
+      - name: Install Foundry for zksync
+        run: ./foundry-zksync/install-foundry-zksync
 
-      - name: Run Forge fmt
-        run: |
-          forge fmt --check
-        id: fmt
+      - name: Run tests
+        run: FOUNDRY_PROFILE=zksync forge test -vvv --zksync
 
-      - name: Run Forge build
-        run: |
-          forge build --sizes
-        id: build
+  coverage:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - name: Install Foundry
+        uses: foundry-rs/foundry-toolchain@v1
+      - name: Run coverage
+        run: yarn coverage
 
-      - name: Run Forge tests
-        run: |
-          forge test -vvv
-        id: test
+  coverage-zksync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - uses: actions/checkout@v4
+        with:
+          repository: matter-labs/foundry-zksync
+          ref: 'main'
+          path: 'foundry-zksync'
+
+      - name: Install Foundry for zksync
+        run: ./foundry-zksync/install-foundry-zksync
+      - name: Run coverage
+        run: yarn coverage:zksync
